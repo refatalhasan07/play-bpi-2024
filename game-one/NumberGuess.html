@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess the number 😝</title>
+  <link rel="shortcut icon" href="../assets/gone.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .game-container {
+      background-color: #1a202c;
+      color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .button {
+      background-color: #2b6cb0;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #3182ce;
+    }
+    .message {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+  <div class="game-container">
+    <h1 class="text-3xl font-bold text-center mb-6">Number Guessing Game</h1>
+    <div class="text-center mb-4">
+      <p>Guess a number between 1 and 50</p>
+    </div>
+
+    <div class="text-center">
+      <input type="number" id="userGuess" class="bg-gray-700 text-white p-2 rounded-md w-full mb-4" placeholder="Enter your guess" min="1" max="50" autofocus />
+      <button class="button w-full mb-4" onclick="checkGuess()">Guess</button>
+    </div>
+
+    <div id="message" class="message text-center"></div>
+
+    <div class="mt-6 text-center">
+      <p id="attemptsLeft" class="text-xl">Attempts Left: 8</p>
+      <button class="button mt-4" onclick="restartGame()">Restart Game</button>
+    </div>
+  </div>
+
+  <script>
+    let targetNumber = Math.floor(Math.random() * 50) + 1;
+    let attempts = 8;
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById('userGuess').value);
+      const messageDiv = document.getElementById('message');
+      const attemptsLeftDiv = document.getElementById('attemptsLeft');
+
+      if (userGuess < 1 || userGuess > 50 || isNaN(userGuess)) {
+        messageDiv.textContent = "Please enter a number between 1 and 50.";
+        messageDiv.classList.add('text-red-500');
+        return;
+      }
+
+      attempts--;
+
+      if (userGuess === targetNumber) {
+        messageDiv.textContent = `Congratulations! You guessed the number ${targetNumber}!`;
+        messageDiv.classList.add('text-green-500');
+        attemptsLeftDiv.textContent = `You guessed it in ${8 - attempts} attempts!`;
+      } else if (userGuess > targetNumber) {
+        messageDiv.textContent = "Too high! Try again.";
+        messageDiv.classList.add('text-yellow-500');
+      } else {
+        messageDiv.textContent = "Too low! Try again.";
+        messageDiv.classList.add('text-yellow-500');
+      }
+
+      attemptsLeftDiv.textContent = `Attempts Left: ${attempts}`;
+
+      if (attempts === 0) {
+        messageDiv.textContent = `Game over! The correct number was ${targetNumber}.`;
+        messageDiv.classList.add('text-red-500');
+        document.getElementById('userGuess').disabled = true;
+        document.querySelector('.button').disabled = true;
+      }
+    }
+
+    function restartGame() {
+      targetNumber = Math.floor(Math.random() * 50) + 1;
+      attempts = 8;
+      document.getElementById('userGuess').disabled = false;
+      document.querySelector('.button').disabled = false;
+      document.getElementById('userGuess').value = '';
+      document.getElementById('message').textContent = '';
+      document.getElementById('attemptsLeft').textContent = `Attempts Left: 8`;
+    }
+  </script>
+</body>
+</html>
